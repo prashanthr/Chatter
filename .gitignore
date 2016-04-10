@@ -3,3 +3,6 @@ _personal
 
 # node_modules
 src/node_modules
+
+# app
+src/app
