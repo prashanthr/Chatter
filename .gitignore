@@ -5,4 +5,10 @@ _personal
 src/node_modules
 
 # app
-src/app
+# src/app
+
+# build
+builds
+
+# test
+ts-test
