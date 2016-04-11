@@ -1,4 +1,4 @@
-var Constants = require('../includes/constants.js');
+var Constants = require('./includes/constants.js');
 var Guid = require('./guid.js');
 module.exports = function Room() {
 	this.id  = '';

@@ -7,6 +7,9 @@ src/node_modules
 # app
 # src/app
 
+# tcp-app
+tcp-app
+
 # build
 builds
 

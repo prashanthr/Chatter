@@ -1,4 +1,4 @@
-var Constants = require('../includes/constants.js');
+var Constants = require('./includes/constants.js');
 module.exports = function User() {
 	this.id = '';
 	this.name = '';

@@ -1,4 +1,4 @@
-var Constants = require('../includes/constants.js');
+var Constants = require('./includes/constants.js');
 module.exports = function Manager() {
 	this.rooms = [];
 	this.users = [];

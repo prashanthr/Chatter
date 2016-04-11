@@ -1,4 +1,4 @@
-var Constants = require('../includes/constants.js');
+var Constants = require('./includes/constants.js');
 module.exports = function Logger(enabled) {
 	this.enabled = enabled;
 	this.log = function(message) {

@@ -8,10 +8,10 @@ const DISCONNECT = "disconnect";
 const CHATMESSAGE = "chat message";
 
 const IncludesDir = "includes";
-const ClientDir = "client";
-const ServerDir = "server";
+const ClientDir = "web-client";
+const ServerDir = "web-server";
 const ServerPort = 3000;
-const ClientRoot = __dirname + "/../" + ClientDir + '/index.html';
+const ClientRoot = __dirname + "/../../" + ClientDir + '/index.html';
 const ClientPath = path.resolve(ClientRoot);
 
 const COMMAND_PREFIX = "/";

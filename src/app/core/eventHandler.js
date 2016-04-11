@@ -1,4 +1,4 @@
-var Constants = require('../includes/constants.js');
+var Constants = require('./includes/constants.js');
 module.exports = function Event() {
 	this.broadcastToAll
 	this.handleEvent = function (event, message) {

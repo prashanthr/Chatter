@@ -1,10 +1,10 @@
 {
-  "name": "socket-chat-example",
-  "version": "0.0.1",
-  "description": "my first socket.io app",
+  "name": "chatter-chat-server",
+  "version": "0.1.0",
+  "description": "A chat server that supports both web sockets and tcp connections",
   "dependencies": {
     "express": "^4.10.2",
-    "socket.io": "^1.4.5",
-    "typescript": "^1.8.9"
+    "net": "^1.0.2",
+    "socket.io": "^1.4.5"
   }
 }

@@ -1,5 +1,5 @@
 /* parser.js */
-var Constants = require('../includes/constants.js');
+var Constants = require('./includes/constants.js');
 module.exports = function Parser() {
 	this.decode = function (message) {
 		if(!message) {

@@ -4,10 +4,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var Constants = require('../includes/constants.js');
-var Parser = new (require('./parser.js'))();
-var EventHandler = new (require('./eventHandler.js'))();
-var Logger = new (require('./logger.js'))(Constants.LOG_ENABLED);
+var Constants = require('../core/includes/constants.js');
+var Parser = new (require('../core/parser.js'))();
+var EventHandler = new (require('../core/eventHandler.js'))();
+var Logger = new (require('../core/logger.js'))(Constants.LOG_ENABLED);
 
 app.get('/', function(req, res){
   //res.send('<h1>Hello world</h1>');
@@ -16,7 +16,7 @@ app.get('/', function(req, res){
 
 io.on(Constants.CONNECTION, function(socket){
   Logger.onConnected();
-    
+  //io.emit('AskUserName')  
   
   socket.on(Constants.DISCONNECT, function(){
     Logger.onDisconnected();
