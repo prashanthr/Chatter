@@ -11,6 +11,7 @@ const IncludesDir = "includes";
 const ClientDir = "web-client";
 const ServerDir = "web-server";
 const ServerPort = 3000;
+const ServerHost = "127.0.0.1";
 const ClientRoot = __dirname + "/../../" + ClientDir + '/index.html';
 const ClientPath = path.resolve(ClientRoot);
 
@@ -30,6 +31,7 @@ module.exports = {
     CLIENT_DIR: ClientDir,
     SERVER_DIR: ServerDir,
     SERVER_PORT: ServerPort,
+    SERVER_HOST: ServerHost,
     CLIENT_PATH: ClientPath,
     COMMAND_PREFIX: COMMAND_PREFIX,
     CMD: MSG_TYPE_CMD,

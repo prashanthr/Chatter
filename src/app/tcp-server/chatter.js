@@ -1,7 +1,7 @@
+/* tcp-server/chatter.js */
 var net = require('net');
-
-var HOST = '127.0.0.1';
-var PORT = 6969;
+var Constants = require('../core/includes/constants.js');
+var Logger = new (require('../core/logger.js'))(Constants.LOG_ENABLED);
 
 // Create a server instance, and chain the listen function to it
 // The function passed to net.createServer() becomes the event handler for the 'connection' event
@@ -9,12 +9,12 @@ var PORT = 6969;
 net.createServer(function(sock) {
     
     // We have a connection - a socket object is assigned to the connection automatically
-    console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
+    Logger.onConnected('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
     
     // Add a 'data' event handler to this instance of socket
     sock.on('data', function(data) {
         
-        console.log('DATA ' + sock.remoteAddress + ': ' + data);
+        Logger.log('DATA ' + sock.remoteAddress + ': ' + data);
         // Write the data back to the socket, the client will receive it as data from the server
         sock.write('You said "' + data + '"');
         
@@ -22,9 +22,13 @@ net.createServer(function(sock) {
     
     // Add a 'close' event handler to this instance of socket
     sock.on('close', function(data) {
-        console.log('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
+        Logger.onDisconnected('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
+    });
+
+    sock.on('error', function(err) {
+        Logger.onError(err);
     });
     
-}).listen(PORT, HOST);
+}).listen(Constants.SERVER_PORT, Constants.SERVER_HOST);
 
-console.log('Server listening on ' + HOST +':'+ PORT);
+console.log('Server listening on ' + Constants.SERVER_HOST +':'+ Constants.SERVER_PORT);

@@ -3,7 +3,9 @@ module.exports = function Logger(enabled) {
 	this.enabled = enabled;
 	this.log = function(message) {
 		if(this.enabled) {
-			console.log(message);	
+			if(message) {
+				console.log(message);		
+			}			
 		}		
 	}
 
@@ -12,15 +14,20 @@ module.exports = function Logger(enabled) {
 		this.log('listening on *:' + port);
 	}
 
-	this.onConnected = function(params) {
-		this.log('A user has connected to ' + Constants.CHATTER);
+	this.onConnected = function(message) {
+		this.log('A user has connected to ' + Constants.CHATTER);		
 	}
 
-	this.onDisconnected = function(params) {
+	this.onDisconnected = function(message) {
 		this.log('A user has disconnected from ' + Constants.CHATTER);
+		this.log(msg);
 	}
 
 	this.onMessageReceived = function(message) {
+		this.log(message);
+	}
+
+	this.onError = function(message) {
 		this.log(message);
 	}
 }
