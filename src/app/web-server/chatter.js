@@ -22,9 +22,9 @@ io.on(Constants.CONNECTION, function(socket){
     Logger.onDisconnected();
   });
   
-  socket.on(Constants.CHATMESSAGE, function(msg){
+  socket.on(Constants.DATA, function(msg){
      Logger.onMessageReceived(msg);
-     io.emit(Constants.CHATMESSAGE, msg);     
+     io.emit(Constants.DATA, msg);     
      var cmd = Parser.decode(msg);
      EventHandler.handleEvent(cmd,msg);
   });

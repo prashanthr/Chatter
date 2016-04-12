@@ -2,33 +2,40 @@
 var net = require('net');
 var Constants = require('../core/includes/constants.js');
 var Logger = new (require('../core/logger.js'))(Constants.LOG_ENABLED);
+var ChatManager = new (require('../core/chatManager.js'))();
 
-// Create a server instance, and chain the listen function to it
-// The function passed to net.createServer() becomes the event handler for the 'connection' event
-// The sock object the callback function receives UNIQUE for each connection
-net.createServer(function(sock) {
-    
-    // We have a connection - a socket object is assigned to the connection automatically
-    Logger.onConnected('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
-    
-    // Add a 'data' event handler to this instance of socket
-    sock.on('data', function(data) {
-        
-        Logger.log('DATA ' + sock.remoteAddress + ': ' + data);
-        // Write the data back to the socket, the client will receive it as data from the server
-        sock.write('You said "' + data + '"');
-        
-    });
-    
-    // Add a 'close' event handler to this instance of socket
-    sock.on('close', function(data) {
-        Logger.onDisconnected('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
-    });
+var server = net.createServer(); 
+server.on(Constants.CONNECTION, manageConnection);
+server.listen(Constants.SERVER_PORT, Constants.SERVER_HOST);
+Logger.onBeginListening(Constants.SERVER_PORT);
 
-    sock.on('error', function(err) {
+function manageConnection(conn) {
+    Logger.onConnected('CONNECTED: ' + conn.remoteAddress +':'+ conn.remotePort);
+    ChatManager.registerConnection(conn);
+
+    conn.on(Constants.DATA, manageData);
+    conn.on(Constants.ERROR, manageError);
+    conn.on(Constants.CLOSE, manageDisconnection);
+
+    function manageData(data) {
+        Logger.onMessageReceived('Data from ' + conn.remoteAddress + ': ' + data);       
+        var client = ChatManager.getClient(conn);
+        Logger.log('Client: ', client);
+        if(client !== null) {
+            if(client.isRegistered) {
+                conn.write(client.userName + ': ' + data);
+            } else {
+                ChatManager.registerClient(data, conn);
+            }
+        }        
+    }
+
+    function manageDisconnection(data) {
+        Logger.onDisconnected('CCLOSED: ' + conn.remoteAddress +' '+ conn.remotePort);
+        ChatManager.unregisterConnection(conn);
+    }
+
+    function manageError(err) {
         Logger.onError(err);
-    });
-    
-}).listen(Constants.SERVER_PORT, Constants.SERVER_HOST);
-
-console.log('Server listening on ' + Constants.SERVER_HOST +':'+ Constants.SERVER_PORT);
+    }    
+}

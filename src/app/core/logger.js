@@ -20,7 +20,7 @@ module.exports = function Logger(enabled) {
 
 	this.onDisconnected = function(message) {
 		this.log('A user has disconnected from ' + Constants.CHATTER);
-		this.log(msg);
+		this.log(message);
 	}
 
 	this.onMessageReceived = function(message) {

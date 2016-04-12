@@ -5,13 +5,14 @@ const CHATTER = "CHATTER";
 
 const CONNECTION = "connection";
 const DISCONNECT = "disconnect";
-const CHATMESSAGE = "chat message";
+const DATA = "data";
+const ERROR = "error";
 
 const IncludesDir = "includes";
 const ClientDir = "web-client";
 const ServerDir = "web-server";
 const ServerPort = 3000;
-const ServerHost = "127.0.0.1";
+const ServerHost = "0.0.0.0";
 const ClientRoot = __dirname + "/../../" + ClientDir + '/index.html';
 const ClientPath = path.resolve(ClientRoot);
 
@@ -26,7 +27,7 @@ module.exports = {
 	CHATTER: CHATTER,
 	CONNECTION: CONNECTION,
 	DISCONNECT: DISCONNECT,
-	CHATMESSAGE: CHATMESSAGE,
+    DATA: DATA,
 	INCLUDES_DIR: IncludesDir,
     CLIENT_DIR: ClientDir,
     SERVER_DIR: ServerDir,
