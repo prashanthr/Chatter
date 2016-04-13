@@ -1,5 +1,5 @@
 var Constants = require('./includes/constants.js');
-module.exports = function User() {
+module.exports = function ClientManager() {
 	this.id = '';
 	this.name = '';
 	this.isAuthenticated = false;

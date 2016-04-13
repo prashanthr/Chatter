@@ -12,7 +12,7 @@ module.exports = function ChatManager() {
 			isRegistered: false
 		};	
 		this.addClient(client);		
-		connection.write('Welcome to ' + Constants.CHATTER + ' server\n' + 'Login name?');
+		connection.write('Welcome to ' + Constants.CHATTER + ' server\n' + 'Login name?\n');
 		console.log('Number of clients conected: ', this.getNumberOfClients());
 	}
 
@@ -46,6 +46,9 @@ module.exports = function ChatManager() {
 		});
 		console.log("found", found);
 		return found !== undefined;
+		/*var client = this.getClientByUserName(userName);
+		console.log("client found: ", client);*/
+		return client !== null;
 	}
 
 	this.getClient = function(connection) {
@@ -69,13 +72,16 @@ module.exports = function ChatManager() {
 	}
 
 	this.registerClient = function(userName, connection) {
+		userName = userName.toString().replace('\r\n', '');
 		if(this.userNameTaken(userName)) {
 			connection.write(userName + ' is taken. Please try another. User Name?');
 		} else {
-			connection.write(userName + ' is available. Registering...');
+			connection.write(userName + ' is available. Registering...\n');
 			var client = this.getClient(connection);
 			client.userName = userName;
 			client.isRegistered = true;
+			/*var index = this.findClientIndex(connection);
+			this.clients[index] = client;*/
 			connection.write('You are now registered as ' + userName);
 		}
 	}
