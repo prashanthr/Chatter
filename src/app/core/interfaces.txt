@@ -1,0 +1,16 @@
+//client
+{
+	connection: {};
+	//Address + Port make a unique key
+	address: string;
+	port: number;	
+	userName: string; //unique
+	isRegistered: boolean;
+	roomId: string;	
+}
+//room
+{
+	id: string;
+	clients: client[];
+	maxNumberOfUsers: number;
+}

@@ -23,7 +23,7 @@ function manageConnection(conn) {
         Logger.log('Client: ', client);
         if(client !== null) {
             if(client.isRegistered) {
-                conn.write(client.userName + ': ' + data);
+                ChatManager.handleMessages(data, conn);
             } else {
                 ChatManager.registerClient(data, conn);
             }

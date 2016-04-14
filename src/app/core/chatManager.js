@@ -1,7 +1,20 @@
 var Constants = require('./includes/constants.js');
+var MessageManager = require('./messageManager.js');
+var RoomManager = require('./roomManager.js');
+var Logger = new (require('./logger.js'))(Constants.LOG_ENABLED);
 module.exports = function ChatManager() {
+	this.MessageManager = new MessageManager();
+	this.RoomManager = new RoomManager();
 	this.rooms = [];
 	this.clients = [];
+
+	//Create Lobby
+	var lobby = {
+		id: Constants.ROOM_LOBBY,
+		clients: [],
+		maxNumberOfUsers: null
+	}
+	this.rooms.push(lobby);
 
 	this.registerConnection = function(connection) {
 		var client = {
@@ -9,11 +22,18 @@ module.exports = function ChatManager() {
 			address: connection.remoteAddress,
 			port: connection.remotePort,
 			userName: null,
-			isRegistered: false
+			isRegistered: false,
+			roomId: Constants.ROOM_LOBBY
 		};	
-		this.addClient(client);		
-		connection.write('Welcome to ' + Constants.CHATTER + ' server\n' + 'Login name?\n');
-		console.log('Number of clients conected: ', this.getNumberOfClients());
+		this.addClient(client);
+		var lobby = this.findRoomById(Constants.ROOM_LOBBY);
+		if(lobby !== undefined) {
+			lobby.clients.push(client);	
+		}		
+
+		connection.write(Constants.PROMPT_WELCOME + `\n`);
+		connection.write(Constants.PROMPT_LOGIN + `\n`);
+		Logger.log('Number of clients conected: ' + this.getNumberOfClients());
 	}
 
 	this.unregisterConnection = function(connection) {
@@ -39,21 +59,18 @@ module.exports = function ChatManager() {
 	}
 
 	this.userNameTaken = function(userName) {
-		console.log("clients", this.clients);
 		var found = this.clients.find((client) => {
-			console.log('client-username', client.userName);
 			return client.userName === userName;
 		});
-		console.log("found", found);
+		
 		return found !== undefined;
 		/*var client = this.getClientByUserName(userName);
-		console.log("client found: ", client);*/
-		return client !== null;
+		console.log("client found: ", client);
+		return client !== null;*/
 	}
 
 	this.getClient = function(connection) {
 		var index = this.findClientIndex(connection);
-		console.log(index);
 		if(index !== -1) {
 			return this.clients[index];
 		} else {
@@ -74,7 +91,7 @@ module.exports = function ChatManager() {
 	this.registerClient = function(userName, connection) {
 		userName = userName.toString().replace('\r\n', '');
 		if(this.userNameTaken(userName)) {
-			connection.write(userName + ' is taken. Please try another. User Name?');
+			connection.write(userName + ' is taken. Please try another. \n Login user name?\n');
 		} else {
 			connection.write(userName + ' is available. Registering...\n');
 			var client = this.getClient(connection);
@@ -82,8 +99,13 @@ module.exports = function ChatManager() {
 			client.isRegistered = true;
 			/*var index = this.findClientIndex(connection);
 			this.clients[index] = client;*/
-			connection.write('You are now registered as ' + userName);
+			connection.write('You are now registered as ' + userName + `\n`);
 		}
+	}
+
+	this.handleMessages = function(data, connection) {
+		var client = this.getClient(connection);
+		this.MessageManager.handleMessage(data, client, this.rooms);
 	}
 
 	this.addRoom = function(room) {
@@ -100,25 +122,10 @@ module.exports = function ChatManager() {
 		return this.clients.length;
 	}
 
-	this.numUsersInRoom = function(room) {
-		if(room && room.userIds.length > 0) {
-			return room.userIds.length;
-		}
-	}
-
-	this.broadcastToAll = function(data) {
-		this.clients.forEach((client) => {
-			client.connection.write(data);
+	this.findRoomById = function(roomId) {
+		var room = this.rooms.find((room) => {
+			return room.id === roomId;
 		});
+		return room;
 	}
-
-	this.broadcast = function(data, userNames) {
-		if(userNames && userNames.length > 0) {
-			userNames.forEach((userName) => {
-				var client = this.getClientByUserName(userName);
-				client.connection.write(data);
-			});
-		}
-	}
-
 }

@@ -16,10 +16,21 @@ const ServerHost = "0.0.0.0";
 const ClientRoot = __dirname + "/../../" + ClientDir + '/index.html';
 const ClientPath = path.resolve(ClientRoot);
 
+const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server";
+const PromptLoginName = "What is your login user name?";
+
+const RoomLobby = "lobby";
+
 const COMMAND_PREFIX = "/";
 const MSG_TYPE_CMD = "CMD";
 const MSG_TYPE_MSG = "MSG";
 const MSG_TYPE_INVALID = "INVALID";
+
+const COMMAND_ROOMS = "/rooms";
+const COMMAND_JOIN = "/join";
+const COMMAND_LEAVE = "/leave";
+const COMMAND_QUIT = "/quit";
+const COMMAND_HELP = "/help";
 
 const LOG_ENABLED = true;
 
@@ -38,5 +49,15 @@ module.exports = {
     CMD: MSG_TYPE_CMD,
     MSG: MSG_TYPE_MSG,
     INVALID: MSG_TYPE_INVALID,
-    LOG_ENABLED: LOG_ENABLED
+    LOG_ENABLED: LOG_ENABLED,
+    PROMPT_WELCOME: PromptWelcomeMessage,
+    PROMPT_LOGIN: PromptLoginName,
+    ROOM_LOBBY: RoomLobby,
+    COMMANDS: {
+        ROOMS: COMMAND_ROOMS,
+        JOIN: COMMAND_JOIN,
+        LEAVE: COMMAND_LEAVE,
+        QUIT: COMMAND_QUIT,
+        HELP: COMMAND_HELP
+    }
 }
