@@ -10,6 +10,7 @@ module.exports = function ChatManager() {
 
 	//Create Lobby	
 	this.RoomManager.createLobby();
+	this.RoomManager.createTestRooms();
 
 	this.registerConnection = function(connection) {
 		var client = {
@@ -97,8 +98,7 @@ module.exports = function ChatManager() {
 			client.isRegistered = true;
 			
 			connection.write('You are registered as ' + userName + `\n`);			
-			this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
-			connection.write(Constants.PROMPT_LOBBY + `\n`);
+			this.RoomManager.addClient(client, Constants.ROOM_LOBBY);			
 			connection.write(Constants.PROMPT_HELP + `\n`);
 		}
 	}
@@ -119,12 +119,13 @@ module.exports = function ChatManager() {
 						this.unregisterConnection(commandAction.client.connection);
 						commandAction.handled = true;
 						break;
-					case Constants.COMMANDS.JOIN:
-						this.RoomManager.joinRoom(commandAction.client, commandAction.data);
+					case Constants.COMMANDS.JOIN:						
+						var response = commandAction.data; //{roomId, isValid}
+						this.RoomManager.joinRoom(commandAction.client, response.roomId);
 						break;
 					case Constants.COMMANDS.LEAVE:
-						commandAction.shouldBroadcast = false;
-						commandAction.handled = false;
+						var response = commandAction.data; //{roomId, isValid}
+						this.RoomManager.leaveRoom(commandAction.client);
 						break;			
 					default:
 						Logger.log('Not handling...');

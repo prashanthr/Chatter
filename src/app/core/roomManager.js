@@ -8,6 +8,14 @@ module.exports = function RoomManager() {
 		this.addRoom(lobby);
 	}
 
+	this.createTestRooms = function() {
+		var fakeRooms = ['Alpha', 'Beta'];
+		fakeRooms.forEach((roomId) => {
+			var room = this.createRoom(roomId);
+			this.addRoom(room);
+		});
+	}
+
 	this.createRoom = function(roomId) {
 		var room = {
 			id: roomId,
@@ -50,7 +58,17 @@ module.exports = function RoomManager() {
 			var clientExists = this.clientExists(client, room);
 			if(!clientExists){
 				console.log('adding client to room ', roomId, client.userName);
+				client.connection.write('Joining room ' + roomId + '...\n');
+				client.roomId = roomId;
 				room.clients.push(client);
+				var welcomeMessage = '';
+				if(roomId === Constants.ROOM_LOBBY) {
+					welcomeMessage = "You are now in the " + Constants.ROOM_LOBBY +"\n";
+				} else {
+					welcomeMessage = 'You are now in room ' + roomId + '\n';
+				}
+				client.connection.write(welcomeMessage);
+				
 			}			
 		}
 	}
@@ -65,12 +83,17 @@ module.exports = function RoomManager() {
 		this.addClient(client, targetRoomId);
 	}
 
+	this.leaveRoom = function(client) {
+		this.joinRoom(client, Constants.ROOM_LOBBY);
+	}
+
 	this.removeClient = function(client) {
 		var room = this.findRoom(client.roomId);
 		var index = room.clients.findIndex((c) => {
 			return c.userName === client.userName;
 		})
 		if(index !== -1) {
+			client.connection.write('You are leaving room ' + client.roomId + '\n');
 			room.clients.splice(index, 1);
 		}
 	}
