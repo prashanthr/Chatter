@@ -127,6 +127,13 @@ module.exports = function ChatManager() {
 						this.unregisterConnection(commandAction.client.connection);
 						commandAction.handled = true;
 						break;
+					case Constants.COMMANDS.JOIN:
+						this.RoomManager.joinRoom(commandAction.client, commandAction.data);
+						break;
+					case Constants.COMMANDS.LEAVE:
+						commandAction.shouldBroadcast = false;
+						commandAction.handled = false;
+						break;			
 					default:
 						Logger.log('Not handling...');
 						break;

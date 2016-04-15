@@ -39,7 +39,7 @@ module.exports = function RoomManager() {
 
 	this.addClient = function(client, roomId) {
 		var room = this.findRoom(roomId);
-		var maxReached = this.maxNumOfUsersReached(room.id);			 
+		var maxReached = this.maxNumOfUsersReached(roomId);			 
 		if(room !== undefined && !maxReached) {
 			var clientExists = this.clientExists(client, room);
 			if(!clientExists){
@@ -47,6 +47,16 @@ module.exports = function RoomManager() {
 				room.clients.push(client);
 			}			
 		}
+	}
+
+	this.joinRoom = function(client, targetRoomId) {
+		if(client.roomId === targetRoomId) {
+			console.log('Client is already in desired room ' + targetRoomId + '\n');
+			return;
+		}
+
+		this.removeClient(client);
+		this.addClient(client, targetRoomId);
 	}
 
 	this.removeClient = function(client) {

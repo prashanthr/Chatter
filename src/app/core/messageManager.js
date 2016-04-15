@@ -31,8 +31,8 @@ module.exports = function MessageManager() {
 		this.Broadcast.broadcastMessage(message, client, rooms);
 	}
 
-	this.handleCommandAction = function(command, client, rooms) {
-		var commandAction = this.Parser.decodeCommand(command, client, rooms);		
+	this.handleCommandAction = function(message, client, rooms) {
+		var commandAction = this.Parser.decodeCommand(message, client, rooms);		
 		if(commandAction.shouldBroadcast) {
 			this.Broadcast.broadcastCommand(commandAction.data, client);	
 		} 
