@@ -1,5 +1,6 @@
 var Constants = require('./includes/constants.js');
 var Formatter = require('./format.js');
+var Logger = new (require('./logger.js'))(Constants.LOG_ENABLED);
 module.exports = function Broadcast() {
 	this.formatter = new Formatter();
 	this.format = function(message, userName) {
@@ -12,7 +13,7 @@ module.exports = function Broadcast() {
 		});*/
 		//client.connection.write('')
 		data = this.format(data, client.userName);
-		console.log(client.userName + ' says: ' + data + '\n');		
+		Logger.log(client.userName + ' says: ' + data + '\n');		
 		var roomId = client.roomId;		
 		var roomToBroadcastTo = rooms.find((room) => {
 			room.id === roomId;
@@ -30,7 +31,9 @@ module.exports = function Broadcast() {
 	}
 
 	this.broadcastCommand = function(data, client) {
-		
+		if(client && data) {
+			client.connection.write(data);
+		}
 	}
 
 	this.broadcastInvalidMessage = function(data, client) {

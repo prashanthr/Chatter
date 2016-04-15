@@ -5,8 +5,9 @@ module.exports = function Parser() {
 		if(!message) {
 			return Constants.INVALID;
 		}
-		if(message.toString().startsWith(Constants.COMMAND_PREFIX)) {
-			if(message.toString().match(/\//g).length > 1) {
+		message = this.stripChars(message);
+		if(message.startsWith(Constants.COMMAND_PREFIX)) {
+			if(message.match(/\//g).length > 1) {
 				return Constants.MSG;
 			} else {
 				return Constants.CMD;

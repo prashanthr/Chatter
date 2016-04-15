@@ -1,6 +1,7 @@
 var Constants = require('./includes/constants.js');
 var Parser = require('./parser.js');
 var Broadcast = require('./broadcast.js');
+var Logger = new (require('./logger.js'))(Constants.LOG_ENABLED);
 module.exports = function MessageManager() {
 	this.Parser = new Parser();
 	this.Broadcast = new Broadcast();
@@ -15,7 +16,7 @@ module.exports = function MessageManager() {
 	this.handleMessage = function(message, client, rooms) {
 		//parse & handle
 		var cmd = this.parse(message);
-		console.log('parsed : ', cmd);
+		Logger.log('parsed : ', cmd);
 		switch(cmd) {
 			case Constants.CMD:
 			this.handleCommandAction(message, client);
