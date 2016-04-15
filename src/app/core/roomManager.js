@@ -29,7 +29,7 @@ module.exports = function RoomManager() {
 	}
 
 	this.makeRoom = function(client, roomId) {
-		client.connection.write("Creating room " + roomId + "\n");
+		client.connection.write("Creating room " + roomId + "...\n");
 		var room = this.createRoom(roomId);
 		room.owner = client.userName;
 		this.addRoom(room);
@@ -110,6 +110,7 @@ module.exports = function RoomManager() {
 				} else {
 					welcomeMessage = 'You are now in room ' + roomId + '\n';
 				}
+				welcomeMessage = welcomeMessage + 'You can start chatting with other users in this room.\n';
 				client.connection.write(welcomeMessage);
 				
 			}			
