@@ -10,7 +10,7 @@ server.listen(Constants.SERVER_PORT, Constants.SERVER_HOST);
 Logger.onBeginListening(Constants.SERVER_PORT);
 
 function manageConnection(conn) {
-    Logger.onConnected('CONNECTED: ' + conn.remoteAddress +':'+ conn.remotePort);
+    Logger.onConnected('Client Connected [' + conn.remoteAddress +':'+ conn.remotePort + ']');
     ChatManager.registerConnection(conn);
 
     conn.on(Constants.DATA, manageData);
@@ -18,7 +18,7 @@ function manageConnection(conn) {
     conn.on(Constants.CLOSE, manageDisconnection);
 
     function manageData(data) {
-        Logger.onMessageReceived('Data from ' + conn.remoteAddress + ': ' + data);       
+        Logger.onMessageReceived('Data [' + conn.remoteAddress + ':' + conn.remotePort + '] :' + data);       
         var client = ChatManager.getClient(conn);
         Logger.log('Client: ', client);
         if(client !== null) {
@@ -31,7 +31,7 @@ function manageConnection(conn) {
     }
 
     function manageDisconnection(data) {
-        Logger.onDisconnected('CCLOSED: ' + conn.remoteAddress +' '+ conn.remotePort);
+        Logger.onDisconnected('Client Disconnected [' + conn.remoteAddress +':'+ conn.remotePort + ']');
         ChatManager.unregisterConnection(conn);
     }
 

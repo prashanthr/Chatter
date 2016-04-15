@@ -32,13 +32,9 @@ module.exports = function Parser() {
 			client: client,
 			handled: false
 		}
+				
+		console.log('c', command);		
 
-		
-		console.log('c', command);	
-		
-		console.log('command.len', command.length);
-
-		//if(command.indexOf(Constants.COMMANDS.HELP) !== -1) 
 		switch(key) {
 			case Constants.COMMANDS.HELP:
 				commandAction.data = QueryHandler.help();

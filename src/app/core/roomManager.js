@@ -2,6 +2,12 @@ var Constants = require('./includes/constants.js');
 var Guid = require('./guid.js');
 module.exports = function RoomManager() {
 	this.rooms = [];
+
+	this.createLobby = function() {
+		var lobby = this.createRoom(Constants.ROOM_LOBBY);
+		this.addRoom(lobby);
+	}
+
 	this.createRoom = function(roomId) {
 		var room = {
 			id: roomId,

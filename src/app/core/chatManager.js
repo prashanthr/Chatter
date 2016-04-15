@@ -8,15 +8,8 @@ module.exports = function ChatManager() {
 	this.rooms = [];
 	this.clients = [];
 
-	//Create Lobby
-	/*var lobby = {
-		id: Constants.ROOM_LOBBY,
-		clients: [],
-		maxNumberOfUsers: null
-	}
-	this.rooms.push(lobby);*/
-	var lobby = this.RoomManager.createRoom(Constants.ROOM_LOBBY);
-	this.RoomManager.addRoom(lobby);
+	//Create Lobby	
+	this.RoomManager.createLobby();
 
 	this.registerConnection = function(connection) {
 		var client = {
@@ -27,12 +20,7 @@ module.exports = function ChatManager() {
 			isRegistered: false,
 			roomId: Constants.ROOM_LOBBY
 		};	
-		this.addClient(client);
-		/*var lobby = this.findRoomById(Constants.ROOM_LOBBY);
-		if(lobby !== undefined) {
-			lobby.clients.push(client);	
-		}*/
-		//this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
+		this.addClient(client);		
 
 		connection.write(Constants.PROMPT_WELCOME + `\n`);
 		connection.write(Constants.PROMPT_LOGIN + `\n`);		
@@ -40,11 +28,13 @@ module.exports = function ChatManager() {
 	}
 
 	this.unregisterConnection = function(connection) {
-		var index = this.findClientIndex(connection);
-		if(index !== -1) {
-			this.clients.splice(index,1);
+		if(connection) {
+			var index = this.findClientIndex(connection);
+			if(index !== -1) {
+				this.clients.splice(index,1);
+			}
+			connection.destroy();
 		}
-		connection.destroy();
 	}
 
 	this.findClientIndex = function(connection) {
@@ -67,10 +57,7 @@ module.exports = function ChatManager() {
 			return client.userName === userName;
 		});
 		
-		return found !== undefined;
-		/*var client = this.getClientByUserName(userName);
-		console.log("client found: ", client);
-		return client !== null;*/
+		return found !== undefined;		
 	}
 
 	this.getClient = function(connection) {
@@ -108,8 +95,7 @@ module.exports = function ChatManager() {
 			var client = this.getClient(connection);
 			client.userName = userName;
 			client.isRegistered = true;
-			/*var index = this.findClientIndex(connection);
-			this.clients[index] = client;*/
+			
 			connection.write('You are registered as ' + userName + `\n`);			
 			this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
 			connection.write(Constants.PROMPT_LOBBY + `\n`);
@@ -119,8 +105,7 @@ module.exports = function ChatManager() {
 
 	this.handleMessages = function(data, connection) {
 		var client = this.getClient(connection);
-		var rooms = this.RoomManager.rooms;
-		console.log('room', rooms);
+		var rooms = this.RoomManager.rooms;		
 		var commandAction = this.MessageManager.handleMessage(data, client, rooms);
 		this.handleServerCommand(commandAction);
 	}
@@ -130,7 +115,6 @@ module.exports = function ChatManager() {
 			if(!commandAction.handled) {
 				switch(commandAction.command) {
 					case Constants.COMMANDS.QUIT:
-						console.log('almostquitting');
 						this.RoomManager.removeClient(commandAction.client);
 						this.unregisterConnection(commandAction.client.connection);
 						commandAction.handled = true;
@@ -148,7 +132,7 @@ module.exports = function ChatManager() {
 				}
 			}
 		}
-		console.log('handling done!');
+		Logger.log('handling done!');
 	}
 
 	this.addRoom = function(room) {
