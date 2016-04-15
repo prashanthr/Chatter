@@ -9,12 +9,14 @@ module.exports = function ChatManager() {
 	this.clients = [];
 
 	//Create Lobby
-	var lobby = {
+	/*var lobby = {
 		id: Constants.ROOM_LOBBY,
 		clients: [],
 		maxNumberOfUsers: null
 	}
-	this.rooms.push(lobby);
+	this.rooms.push(lobby);*/
+	var lobby = this.RoomManager.createRoom(Constants.ROOM_LOBBY);
+	this.RoomManager.addRoom(lobby);
 
 	this.registerConnection = function(connection) {
 		var client = {
@@ -26,13 +28,15 @@ module.exports = function ChatManager() {
 			roomId: Constants.ROOM_LOBBY
 		};	
 		this.addClient(client);
-		var lobby = this.findRoomById(Constants.ROOM_LOBBY);
+		/*var lobby = this.findRoomById(Constants.ROOM_LOBBY);
 		if(lobby !== undefined) {
 			lobby.clients.push(client);	
-		}		
+		}*/
+		//this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
 
 		connection.write(Constants.PROMPT_WELCOME + `\n`);
 		connection.write(Constants.PROMPT_LOGIN + `\n`);
+		connection.write(Constants.PROMPT_LOBBY + `\n`);
 		Logger.log('Number of clients conected: ' + this.getNumberOfClients());
 	}
 
@@ -99,13 +103,16 @@ module.exports = function ChatManager() {
 			client.isRegistered = true;
 			/*var index = this.findClientIndex(connection);
 			this.clients[index] = client;*/
-			connection.write('You are now registered as ' + userName + `\n`);
+			connection.write('You are now registered as ' + userName + `\n`);			
+			this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
 		}
 	}
 
 	this.handleMessages = function(data, connection) {
 		var client = this.getClient(connection);
-		this.MessageManager.handleMessage(data, client, this.rooms);
+		var rooms = this.RoomManager.rooms;
+		console.log('room', rooms);
+		this.MessageManager.handleMessage(data, client, rooms);
 	}
 
 	this.addRoom = function(room) {

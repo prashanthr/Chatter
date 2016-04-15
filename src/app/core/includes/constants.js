@@ -16,10 +16,13 @@ const ServerHost = "0.0.0.0";
 const ClientRoot = __dirname + "/../../" + ClientDir + '/index.html';
 const ClientPath = path.resolve(ClientRoot);
 
+const RoomLobby = "lobby";
+
 const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server";
 const PromptLoginName = "What is your login user name?";
+const PromptLobby = "You are now in the " + RoomLobby;
 
-const RoomLobby = "lobby";
+
 
 const COMMAND_PREFIX = "/";
 const MSG_TYPE_CMD = "CMD";
@@ -52,6 +55,7 @@ module.exports = {
     LOG_ENABLED: LOG_ENABLED,
     PROMPT_WELCOME: PromptWelcomeMessage,
     PROMPT_LOGIN: PromptLoginName,
+    PROMPT_LOBBY: PromptLobby,
     ROOM_LOBBY: RoomLobby,
     COMMANDS: {
         ROOMS: COMMAND_ROOMS,

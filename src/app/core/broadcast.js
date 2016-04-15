@@ -13,17 +13,24 @@ module.exports = function Broadcast() {
 		});*/
 		//client.connection.write('')
 		data = this.format(data, client.userName);
-		Logger.log(client.userName + ' says: ' + data + '\n');		
+		Logger.log('data', data);		
 		var roomId = client.roomId;		
+		//console.log('printing', client, rooms, rooms.length);
 		var roomToBroadcastTo = rooms.find((room) => {
-			room.id === roomId;
+			return room.id === roomId;
 		});
+
+		console.log('roomToBroadcastTo', roomToBroadcastTo);
 		
 		if(roomToBroadcastTo && roomToBroadcastTo.clients && roomToBroadcastTo.clients.length > 0) {
+			console.log('here');
 			roomToBroadcastTo.clients.forEach((c) => {
-				if(c.id === client.id)  {
+				console.log('user', c.userName);
+				if(c.userName === client.userName)  {
 					//skip
+					console.log('skipping');
 				} else {
+					console.log('writing');
 					c.connection.write(data);
 				}
 			});
