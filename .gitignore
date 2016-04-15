@@ -5,4 +5,13 @@ _personal
 src/node_modules
 
 # app
-src/app
+# src/app
+
+# tcp-app
+tcp-app
+
+# build
+builds
+
+# test
+ts-test
