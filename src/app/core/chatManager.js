@@ -127,14 +127,22 @@ module.exports = function ChatManager() {
 						var response = commandAction.data; //{roomId, isValid}
 						this.RoomManager.leaveRoom(commandAction.client);
 						break;			
+					case Constants.COMMANDS.CREATE:
+						var response = commandAction.data;						
+						this.RoomManager.makeRoom(commandAction.client, response.roomId);
+						break;
+					case Constants.COMMANDS.DELETE:
+						var response = commandAction.data;
+						this.RoomManager.removeRoom(response.roomId, commandAction.client);
+						break;
 					default:
-						Logger.log('Not handling...');
+						Logger.log('Not handling ' + commandAction + '\n');						
 						break;
 				}
 			}
 		}
 		Logger.log('handling done!');
-	}
+	}	
 
 	this.addRoom = function(room) {
 		this.rooms.push(room);

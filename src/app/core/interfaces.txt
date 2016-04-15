@@ -14,6 +14,8 @@
 	clients: client[];
 	maxNumberOfUsers: number;
 	isActive: boolean;
+	owner: string;
+	isPrivate: boolean;
 }
 //commandAction
 {

@@ -21,9 +21,19 @@ module.exports = function RoomManager() {
 			id: roomId,
 			clients: [],
 			maxNumberOfUsers: null,
-			isActive: true
+			isActive: true,
+			owner: 'server',
+			isPrivate: false,
 		}
 		return room;
+	}
+
+	this.makeRoom = function(client, roomId) {
+		client.connection.write("Creating room " + roomId + "\n");
+		var room = this.createRoom(roomId);
+		room.owner = client.userName;
+		this.addRoom(room);
+		client.connection.write(roomId + " has been created.\n");
 	}
 
 	this.getRooms = function() {
@@ -49,6 +59,39 @@ module.exports = function RoomManager() {
 	this.getClientRoom = function(client) {
 		var room = this.findRoom(client.roomId);
 		return room;
+	}
+
+	this.removeRoom = function(roomId, client) {
+		if(roomId === Constants.ROOM_LOBBY) {
+			client.connection.write('Cannot delete lobby. You do not have permissions to do so.\n');
+			return;
+		}
+
+		var roomIndex = this.rooms.findIndex((room) => {
+			return room.id === roomId;
+		});
+
+		var room = this.rooms[roomIndex];
+
+		if(roomIndex !== -1) {
+			if(room.owner === client.userName) {
+				var room = this.rooms[roomIndex];
+				if(room) {
+					room.clients.forEach((client) => {
+						//client.roomId = Constants.ROOM_LOBBY;
+						this.leaveRoom(client);
+					});
+				}
+				this.rooms.splice(roomIndex, 1);
+				client.connection.write('Room ' + roomId + ' has been deleted. Type ' + Constants.COMMANDS.ROOMS + ' to view active rooms. \n');
+			} else {
+				client.connection.write('You do not have permissions to delete room ' + roomId + '\n');
+			}
+			
+		} else {
+			client.connection.write('No room with name ' + roomId + ' found.\n');
+		}
+		
 	}
 
 	this.addClient = function(client, roomId) {

@@ -32,7 +32,7 @@ module.exports = function Parser() {
 			client: client,
 			handled: false
 		}
-				
+
 		console.log('c', command);		
 
 		switch(key) {
@@ -59,7 +59,7 @@ module.exports = function Parser() {
 					commandAction.shouldBroadcast = false;
 					commandAction.handled = false;	
 				} else {
-					commandAction.data = 'Room does not exist or is invalid\n';
+					commandAction.data = 'Room does not exist or is invalid. Room names are case sensitive.\n';
 					commandAction.shouldBroadcast = true;
 					commandAction.handled = true;
 				}				
@@ -67,10 +67,48 @@ module.exports = function Parser() {
 			case Constants.COMMANDS.LEAVE:
 				commandAction.shouldBroadcast = false;
 				commandAction.handled = false;
-				break;			
+				break;
+			case Constants.COMMANDS.CREATE:
+				console.log('checking create');
+				var checkRoom = QueryHandler.checkRoom(command, rooms);
+				if(checkRoom.isValid) {
+					//Room already exists
+					commandAction.data = 'Room already exists! Cannot create a room with the same name\n';
+					commandAction.shouldBroadcast = true;
+					commandAction.handled = true;
+				} else {
+					if(checkRoom.roomId !== null) {
+						commandAction.data = checkRoom;
+						commandAction.shouldBroadcast = false;
+						commandAction.handled = false;	
+					} else {
+						commandAction.data = 'Invalid/bad room name! Cannot create a room with that name\n';
+						commandAction.shouldBroadcast = true;
+						commandAction.handled = true;
+					}
+					
+				}
+				break;
+			case Constants.COMMANDS.DELETE:
+				var checkRoom = QueryHandler.checkRoom(command, rooms);
+				if(checkRoom.isValid){
+					commandAction.data = checkRoom;
+					commandAction.shouldBroadcast = false;
+					commandAction.handled = false;	
+				} else {
+					commandAction.data = 'No such room exists. Nothing to delete\n';
+					commandAction.shouldBroadcast = true;
+					commandAction.handled = true;	
+				}
+				break;
 			case Constants.COMMANDS.INFO:
-				commandAction.data = QueryHandler.info(client);
+				commandAction.data = QueryHandler.info(client, rooms);
 				commandAction.handled = true;
+				break;
+			case Constants.COMMANDS.MSG:
+				commandAction.data = 'Private messaging is not yet supported. Coming soon!\n';
+				commandAction.handled = true;
+				//QueryHandler.msg(client)
 				break;
 			default:
 				commandAction.data = 'The command [' + command + '] is invalid or not yet supported. ' + Constants.PROMPT_HELP;

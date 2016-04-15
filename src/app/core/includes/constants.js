@@ -28,9 +28,12 @@ const COMMAND_ROOMS = "/rooms";
 const COMMAND_USERS = "/users";
 const COMMAND_JOIN = "/join";
 const COMMAND_LEAVE = "/leave";
+const COMMAND_CREATE = "/create";
+const COMMAND_DELETE = "/delete";
 const COMMAND_QUIT = "/quit";
 const COMMAND_HELP = "/help";
 const COMMAND_INFO = "/info";
+const COMMAND_MSG = "/msg";
 
 const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server\n" + "Version " + VERSION + "\n";
 const PromptLoginName = "What is your login user name?";
@@ -66,8 +69,23 @@ module.exports = {
         USERS: COMMAND_USERS,
         JOIN: COMMAND_JOIN,
         LEAVE: COMMAND_LEAVE,
+        CREATE: COMMAND_CREATE,
         QUIT: COMMAND_QUIT,
         HELP: COMMAND_HELP,
-        INFO: COMMAND_INFO
+        INFO: COMMAND_INFO,
+        MSG: COMMAND_MSG,
+        DELETE: COMMAND_DELETE
+    },
+    COMMAND_DETAILS: {
+        ROOMS: 'Lists all the rooms on the server. Usage: ' + COMMAND_ROOMS,
+        USERS: 'Lists all the users in the current room. Usage: ' + COMMAND_USERS,
+        JOIN: 'Joins a specified chat room. Usage ' + COMMAND_JOIN + ' [roomname]',
+        LEAVE: 'Removes user from the current chat room and returns them to the lobby. Usage: ' + COMMAND_LEAVE,
+        CREATE: 'Creates a new chat room. Usage: ' + COMMAND_CREATE + ' [roomname]',
+        QUIT: 'Disconnects the user from the chat server. Usage: ' + COMMAND_QUIT,
+        HELP: 'Lists all available commands for interaction with the server. Usage: ' + COMMAND_HELP,
+        INFO: 'Lists useful information for the user (connection, room and server information). Usage: ' + COMMAND_INFO,
+        MSG: '(Not Supported Yet) Private messaging between 2 users. Usage: ' + COMMAND_MSG + ' [username] [message]',
+        DELETE: 'Deletes a chat room. A user can only delete a chat room created by him/her. Usage: ' + COMMAND_DELETE + ' [roomname]',
     }
 }
