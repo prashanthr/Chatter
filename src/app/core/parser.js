@@ -1,5 +1,6 @@
 /* parser.js */
 var Constants = require('./includes/constants.js');
+var CommandHandler = new (require('./commandHandler.js'))();
 module.exports = function Parser() {
 	this.decode = function (message) {
 		if(!message) {
@@ -20,7 +21,7 @@ module.exports = function Parser() {
 		return message.toString().replace(/\r\n/g, '');
 	}
 
-	this.decodeCommand = function(command) {
+	this.decodeCommand = function(command, client, rooms) {
 		var data = '';
 		command = this.stripChars(command);
 		console.log('c', command);	
@@ -30,18 +31,18 @@ module.exports = function Parser() {
 		//if(command.indexOf(Constants.COMMANDS.HELP) !== -1) 
 		switch(command) {
 			case Constants.COMMANDS.HELP:
-				data = 'Here are the list of available commands: ' + '\n';
-				for(var prop in Constants.COMMANDS) {
-					data = data + Constants.COMMANDS[prop] + '\n';
-				}
-				
-			break;
+				return CommandHandler.help();				
+				break;
+			case Constants.COMMANDS.ROOMS:
+				console.log('room handling');
+				return CommandHandler.rooms(client, rooms);
+				break;
 			default:
-				console.log('default');
+				data = 'The command [' + command + '] is invalid. Type ' + Constants.COMMANDS.HELP + ' for a list of available commands.' + '\n';
 				break;
 		}
 
-		console.log('data to send: ', data);
+		//console.log('data to send: ', data);
 		return data;		
 	}
 }

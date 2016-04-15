@@ -6,7 +6,8 @@ module.exports = function RoomManager() {
 		var room = {
 			id: roomId,
 			clients: [],
-			maxNumberOfUsers: null
+			maxNumberOfUsers: null,
+			isActive: true
 		}
 		return room;
 	}

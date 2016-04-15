@@ -35,8 +35,7 @@ module.exports = function ChatManager() {
 		//this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
 
 		connection.write(Constants.PROMPT_WELCOME + `\n`);
-		connection.write(Constants.PROMPT_LOGIN + `\n`);
-		connection.write(Constants.PROMPT_LOBBY + `\n`);
+		connection.write(Constants.PROMPT_LOGIN + `\n`);		
 		Logger.log('Number of clients conected: ' + this.getNumberOfClients());
 	}
 
@@ -105,6 +104,7 @@ module.exports = function ChatManager() {
 			this.clients[index] = client;*/
 			connection.write('You are now registered as ' + userName + `\n`);			
 			this.RoomManager.addClient(client, Constants.ROOM_LOBBY);
+			connection.write(Constants.PROMPT_LOBBY + `\n`);
 		}
 	}
 

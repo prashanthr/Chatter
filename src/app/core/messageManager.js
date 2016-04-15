@@ -9,17 +9,13 @@ module.exports = function MessageManager() {
 		return this.Parser.decode(message);
 	}
 
-	this.parseCommand = function(command) {
-		return this.Parser.decodeCommand(command);
-	}
-
 	this.handleMessage = function(message, client, rooms) {
 		//parse & handle
 		var cmd = this.parse(message);
 		Logger.log('parsed : ', cmd);
 		switch(cmd) {
 			case Constants.CMD:
-			this.handleCommandAction(message, client);
+			this.handleCommandAction(message, client, rooms);
 				break;
 			case Constants.MSG:
 			this.handleMessageAction(message, client, rooms);
@@ -35,8 +31,8 @@ module.exports = function MessageManager() {
 		this.Broadcast.broadcastMessage(message, client, rooms);
 	}
 
-	this.handleCommandAction = function(command, client) {
-		var cmd = this.parseCommand(command);		
+	this.handleCommandAction = function(command, client, rooms) {
+		var cmd = this.Parser.decodeCommand(command, client, rooms);		
 		this.Broadcast.broadcastCommand(cmd, client);
 	}
 

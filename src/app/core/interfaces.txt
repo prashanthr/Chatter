@@ -13,4 +13,5 @@
 	id: string;
 	clients: client[];
 	maxNumberOfUsers: number;
+	isActive: boolean;
 }
