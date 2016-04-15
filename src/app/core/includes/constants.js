@@ -2,6 +2,7 @@
 var path = require('path');
 
 const CHATTER = "CHATTER";
+const VERSION = "1.0.0";
 
 const CONNECTION = "connection";
 const DISCONNECT = "disconnect";
@@ -31,7 +32,7 @@ const COMMAND_QUIT = "/quit";
 const COMMAND_HELP = "/help";
 const COMMAND_INFO = "/info";
 
-const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server";
+const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server\n" + "Version " + VERSION + "\n";
 const PromptLoginName = "What is your login user name?";
 const PromptLobby = "You are now in the " + RoomLobby;
 const PromptHelp = "Type " + COMMAND_HELP + " for a list of available commands. \n";

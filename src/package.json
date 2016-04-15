@@ -1,7 +1,7 @@
 {
-  "name": "chatter-chat-server",
-  "version": "0.1.0",
-  "description": "A chat server that supports both web sockets and tcp connections",
+  "name": "chatter-tcp-chat-server",
+  "version": "1.0.0",
+  "description": "A chat server built on node.js",
   "dependencies": {
     "express": "^4.10.2",
     "net": "^1.0.2",
