@@ -66,8 +66,7 @@ module.exports = function Parser() {
 				commandAction.shouldBroadcast = false;
 				commandAction.handled = false;
 				break;
-			case Constants.COMMANDS.CREATE:
-				console.log('checking create');
+			case Constants.COMMANDS.CREATE:				
 				var checkRoom = QueryHandler.checkRoom(command, rooms);
 				if(checkRoom.isValid) {
 					//Room already exists

@@ -14,17 +14,14 @@ module.exports = function Broadcast() {
 		
 		var roomToBroadcastTo = rooms.find((room) => {
 			return room.id === roomId;
-		});
-
-		Logger.log('roomToBroadcastTo :' + roomToBroadcastTo);
+		});	
 		
 		if(roomToBroadcastTo && roomToBroadcastTo.clients && roomToBroadcastTo.clients.length > 0) {
 			roomToBroadcastTo.clients.forEach((c) => {
 				if(c.userName === client.userName)  {
-					//skip
-					console.log('skipping');
+					//skip same client					
 				} else {
-					console.log('broadcasting');
+					//broadcast to intended recipient(s)
 					c.connection.write(data);
 				}
 			});

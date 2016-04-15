@@ -25,8 +25,7 @@ module.exports = function QueryHandler() {
 			data = data + 'End of list. \n';			
 		} else {
 			data = data + 'No rooms available \n';
-		}
-		console.log('data', data);
+		}		
 		return data;
 	}
 
@@ -73,8 +72,7 @@ module.exports = function QueryHandler() {
 					check.roomId = roomToJoin;
 				}
 			}
-		}
-		console.log('check', check);
+		}		
 		return check;
 	}
 
