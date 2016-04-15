@@ -5,8 +5,21 @@ _personal
 src/node_modules
 
 # app
+<<<<<<< HEAD
 #src/app
 tcp-app
 
 #build
 builds
+=======
+# src/app
+
+# tcp-app
+tcp-app
+
+# build
+builds
+
+# test
+ts-test
+>>>>>>> origin/master

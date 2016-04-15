@@ -1,0 +1,27 @@
+//client
+{
+	connection: {};
+	//Address + Port make a unique key
+	address: string;
+	port: number;	
+	userName: string; //unique
+	isRegistered: boolean;
+	roomId: string;	
+}
+//room
+{
+	id: string;
+	clients: client[];
+	maxNumberOfUsers: number;
+	isActive: boolean;
+	owner: string;
+	isPrivate: boolean;
+}
+//commandAction
+{
+	command: string;
+	shouldBroadcast: boolean;
+	data: string;
+	client: client;
+	handled: boolean;
+}
