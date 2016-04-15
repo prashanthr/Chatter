@@ -49,6 +49,16 @@ module.exports = function RoomManager() {
 		}
 	}
 
+	this.removeClient = function(client) {
+		var room = this.findRoom(client.roomId);
+		var index = room.clients.findIndex((c) => {
+			return c.userName === client.userName;
+		})
+		if(index !== -1) {
+			room.clients.splice(index, 1);
+		}
+	}
+
 	this.clientExists = function(client, room) {
 		if(room && client) {			
 			if(room.clients.length > 0) {

@@ -44,6 +44,7 @@ module.exports = function ChatManager() {
 		if(index !== -1) {
 			this.clients.splice(index,1);
 		}
+		connection.destroy();
 	}
 
 	this.findClientIndex = function(connection) {
@@ -112,7 +113,27 @@ module.exports = function ChatManager() {
 		var client = this.getClient(connection);
 		var rooms = this.RoomManager.rooms;
 		console.log('room', rooms);
-		this.MessageManager.handleMessage(data, client, rooms);
+		var commandAction = this.MessageManager.handleMessage(data, client, rooms);
+		this.handleServerCommand(commandAction);
+	}
+
+	this.handleServerCommand = function(commandAction) {
+		if(commandAction) {
+			if(!commandAction.handled) {
+				switch(commandAction.command) {
+					case Constants.COMMANDS.QUIT:
+						console.log('almostquitting');
+						this.RoomManager.removeClient(commandAction.client);
+						this.unregisterConnection(commandAction.client.connection);
+						commandAction.handled = true;
+						break;
+					default:
+						Logger.log('Not handling...');
+						break;
+				}
+			}
+		}
+		console.log('handling done!');
 	}
 
 	this.addRoom = function(room) {
@@ -120,7 +141,8 @@ module.exports = function ChatManager() {
 	}
 	this.addClient = function(client) {
 		this.clients.push(client);
-	}	
+	}
+
 	this.getNumberOfRooms = function() {
 		return this.rooms.length;
 	}

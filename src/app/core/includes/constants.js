@@ -30,6 +30,7 @@ const MSG_TYPE_MSG = "MSG";
 const MSG_TYPE_INVALID = "INVALID";
 
 const COMMAND_ROOMS = "/rooms";
+const COMMAND_USERS = "/users";
 const COMMAND_JOIN = "/join";
 const COMMAND_LEAVE = "/leave";
 const COMMAND_QUIT = "/quit";
@@ -59,6 +60,7 @@ module.exports = {
     ROOM_LOBBY: RoomLobby,
     COMMANDS: {
         ROOMS: COMMAND_ROOMS,
+        USERS: COMMAND_USERS,
         JOIN: COMMAND_JOIN,
         LEAVE: COMMAND_LEAVE,
         QUIT: COMMAND_QUIT,

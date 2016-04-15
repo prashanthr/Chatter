@@ -15,14 +15,14 @@ module.exports = function MessageManager() {
 		Logger.log('parsed : ', cmd);
 		switch(cmd) {
 			case Constants.CMD:
-			this.handleCommandAction(message, client, rooms);
+				return this.handleCommandAction(message, client, rooms);
 				break;
 			case Constants.MSG:
-			this.handleMessageAction(message, client, rooms);
+				this.handleMessageAction(message, client, rooms);
 				break;
 			case Constants.INVALID:			
 			default:
-			this.handleInvalidAction(message, client);
+				this.handleInvalidAction(message, client);
 				break;
 		}
 	}
@@ -32,8 +32,12 @@ module.exports = function MessageManager() {
 	}
 
 	this.handleCommandAction = function(command, client, rooms) {
-		var cmd = this.Parser.decodeCommand(command, client, rooms);		
-		this.Broadcast.broadcastCommand(cmd, client);
+		var commandAction = this.Parser.decodeCommand(command, client, rooms);		
+		if(commandAction.shouldBroadcast) {
+			this.Broadcast.broadcastCommand(commandAction.data, client);	
+		} 
+		console.log('commandAction', commandAction);
+		return commandAction;		
 	}
 
 	this.handleInvalidAction = function(message, client) {

@@ -15,3 +15,11 @@
 	maxNumberOfUsers: number;
 	isActive: boolean;
 }
+//commandAction
+{
+	command: string;
+	shouldBroadcast: boolean;
+	data: string;
+	client: client;
+	handled: boolean;
+}

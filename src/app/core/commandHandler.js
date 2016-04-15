@@ -10,7 +10,6 @@ module.exports = function CommandHandler() {
 	}
 
 	this.rooms = function(client, rooms) {
-		console.log('roomhere');
 		var data = '';
 		if(client && rooms && rooms.length > 0) {
 			data = data + 'Active Rooms: \n';
@@ -21,9 +20,32 @@ module.exports = function CommandHandler() {
 			});
 			data = data + 'End of list. \n';			
 		} else {
-			data = data + 'No rooms available';
+			data = data + 'No rooms available \n';
 		}
 		console.log('data', data);
 		return data;
 	}
+
+	this.users = function(client, rooms) {
+		var data = '';
+		if(client && rooms && rooms.length > 0) {
+			data = data + 'Active Users: \n';
+			var room = rooms.find((room) => {
+				return room.id === client.roomId;
+			});
+			if(room !== undefined){
+				if(room.clients && room.clients.length > 0) {
+					room.clients.forEach((c) => {
+						var indicator = (c.userName === client.userName) ? ' (you) ' : '';
+						data = data + c.userName + indicator + '\n';
+					});
+					data = data + 'End of list. \n';
+				}
+			}
+		} else {
+			data = data + 'No users online \n';
+		}
+		return data;
+	}
+
 }
