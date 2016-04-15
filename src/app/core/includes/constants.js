@@ -18,12 +18,6 @@ const ClientPath = path.resolve(ClientRoot);
 
 const RoomLobby = "lobby";
 
-const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server";
-const PromptLoginName = "What is your login user name?";
-const PromptLobby = "You are now in the " + RoomLobby;
-
-
-
 const COMMAND_PREFIX = "/";
 const MSG_TYPE_CMD = "CMD";
 const MSG_TYPE_MSG = "MSG";
@@ -35,6 +29,13 @@ const COMMAND_JOIN = "/join";
 const COMMAND_LEAVE = "/leave";
 const COMMAND_QUIT = "/quit";
 const COMMAND_HELP = "/help";
+const COMMAND_INFO = "/info";
+
+const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server";
+const PromptLoginName = "What is your login user name?";
+const PromptLobby = "You are now in the " + RoomLobby;
+const PromptHelp = "Type " + COMMAND_HELP + " for a list of available commands. \n";
+
 
 const LOG_ENABLED = true;
 
@@ -57,6 +58,7 @@ module.exports = {
     PROMPT_WELCOME: PromptWelcomeMessage,
     PROMPT_LOGIN: PromptLoginName,
     PROMPT_LOBBY: PromptLobby,
+    PROMPT_HELP: PromptHelp,
     ROOM_LOBBY: RoomLobby,
     COMMANDS: {
         ROOMS: COMMAND_ROOMS,
@@ -64,6 +66,7 @@ module.exports = {
         JOIN: COMMAND_JOIN,
         LEAVE: COMMAND_LEAVE,
         QUIT: COMMAND_QUIT,
-        HELP: COMMAND_HELP
+        HELP: COMMAND_HELP,
+        INFO: COMMAND_INFO
     }
 }

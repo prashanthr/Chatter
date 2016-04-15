@@ -72,8 +72,12 @@ module.exports = function Parser() {
 				commandAction.shouldBroadcast = false;
 				commandAction.handled = false;
 				break;			
+			case Constants.COMMANDS.INFO:
+				commandAction.data = QueryHandler.info(client);
+				commandAction.handled = true;
+				break;
 			default:
-				commandAction.data = 'The command [' + command + '] is invalid or not yet supported. Type ' + Constants.COMMANDS.HELP + ' for a list of available commands.' + '\n';
+				commandAction.data = 'The command [' + command + '] is invalid or not yet supported. ' + Constants.PROMPT_HELP;
 				commandAction.handled = true;
 				break;
 		}

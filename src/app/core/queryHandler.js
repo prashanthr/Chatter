@@ -1,4 +1,5 @@
 var Constants = require('./includes/constants.js');
+var Utils = new (require('./utils.js'))();
 module.exports = function QueryHandler() {
 	this.help = function() {
 		data = 'Here are the list of available commands: ' + '\n';
@@ -66,6 +67,18 @@ module.exports = function QueryHandler() {
 			}
 		}
 		return check;
+	}
+
+	this.info = function(client){
+		var data = '';
+		data = data + '//////////////////////////////////////////\n';
+		data = data + 'Your Username: ' + client.userName + '\n';
+		data = data + 'Your Address: ' + client.address + '\n';
+		data = data + 'Your Port: ' + client.port + '\n';
+		data = data + 'Current Chat Room: ' + client.roomId + '\n';
+		data = data + 'Server Time: ' + Utils.getTimestamp() + '\n';
+		data = data + '//////////////////////////////////////////\n';
+		return data;
 	}
 
 }
