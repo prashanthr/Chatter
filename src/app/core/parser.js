@@ -33,8 +33,6 @@ module.exports = function Parser() {
 			handled: false
 		}
 
-		console.log('c', command);		
-
 		switch(key) {
 			case Constants.COMMANDS.HELP:
 				commandAction.data = QueryHandler.help();

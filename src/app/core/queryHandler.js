@@ -19,7 +19,8 @@ module.exports = function QueryHandler() {
 			rooms.forEach((room) => {
 				var isActive = (room.isActive ? '* ' : '');
 				var indicator = (client.roomId === room.id) ? ' (you are here) ' : '';
-				data = data + isActive + room.id + indicator + '\n';
+				var numUsers = room.clients.length;
+				data = data + isActive + room.id + ' [' + numUsers +'] ' + indicator + '\n';
 			});
 			data = data + 'End of list. \n';			
 		} else {

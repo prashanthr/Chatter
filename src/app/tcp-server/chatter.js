@@ -19,8 +19,7 @@ function manageConnection(conn) {
 
     function manageData(data) {
         Logger.onMessageReceived('Data [' + conn.remoteAddress + ':' + conn.remotePort + '] :' + data);       
-        var client = ChatManager.getClient(conn);
-        Logger.log('Client: ', client);
+        var client = ChatManager.getClient(conn);        
         if(client !== null) {
             if(client.isRegistered) {
                 ChatManager.handleMessages(data, conn);

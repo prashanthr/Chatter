@@ -4,8 +4,7 @@ var RoomManager = require('./roomManager.js');
 var Logger = new (require('./logger.js'))(Constants.LOG_ENABLED);
 module.exports = function ChatManager() {
 	this.MessageManager = new MessageManager();
-	this.RoomManager = new RoomManager();
-	this.rooms = [];
+	this.RoomManager = new RoomManager();	
 	this.clients = [];
 
 	//Create Lobby	
@@ -136,33 +135,18 @@ module.exports = function ChatManager() {
 						this.RoomManager.removeRoom(response.roomId, commandAction.client);
 						break;
 					default:
-						Logger.log('Not handling ' + commandAction + '\n');						
+						Logger.log('Not handling command ' + commandAction + '\n');						
 						break;
 				}
 			}
-		}
-		Logger.log('handling done!');
+		}		
 	}	
 
-	this.addRoom = function(room) {
-		this.rooms.push(room);
-	}
 	this.addClient = function(client) {
 		this.clients.push(client);
 	}
 
-	this.getNumberOfRooms = function() {
-		return this.rooms.length;
-	}
-
 	this.getNumberOfClients = function() {
 		return this.clients.length;
-	}
-
-	this.findRoomById = function(roomId) {
-		var room = this.rooms.find((room) => {
-			return room.id === roomId;
-		});
-		return room;
-	}
+	}	
 }

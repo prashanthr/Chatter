@@ -11,8 +11,7 @@ module.exports = function MessageManager() {
 
 	this.handleMessage = function(message, client, rooms) {
 		//parse & handle
-		var cmd = this.parse(message);
-		Logger.log('parsed : ', cmd);
+		var cmd = this.parse(message);		
 		switch(cmd) {
 			case Constants.CMD:
 				return this.handleCommandAction(message, client, rooms);
@@ -35,8 +34,7 @@ module.exports = function MessageManager() {
 		var commandAction = this.Parser.decodeCommand(message, client, rooms);		
 		if(commandAction.shouldBroadcast) {
 			this.Broadcast.broadcastCommand(commandAction.data, client);	
-		} 
-		console.log('commandAction', commandAction);
+		} 		
 		return commandAction;		
 	}
 
