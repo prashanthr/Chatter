@@ -7,9 +7,13 @@ module.exports = function Broadcast() {
 		return this.formatter.formatMessage(message, userName);
 	}
 
-	this.broadcastMessage = function(data, client, rooms) {
-		data = this.format(data, client.userName);
-		Logger.log('data', data);		
+	this.broadcastMessage = function(data, client, rooms, isServerMessage) {
+		if(!isServerMessage) {
+			data = this.format(data, client.userName);	
+		} else {
+			data = data + '\n';
+		}
+		
 		var roomId = client.roomId;		
 		
 		var roomToBroadcastTo = rooms.find((room) => {
@@ -35,6 +39,6 @@ module.exports = function Broadcast() {
 	}
 
 	this.broadcastInvalidMessage = function(data, client) {
-
+		//DO NOTHING
 	}	
 };

@@ -20,7 +20,7 @@ module.exports = function ChatManager() {
 			isRegistered: false,
 			roomId: Constants.ROOM_LOBBY
 		};	
-		this.addClient(client);		
+		this.addClient(client);				
 
 		connection.write(Constants.PROMPT_WELCOME + `\n`);
 		connection.write(Constants.PROMPT_LOGIN + `\n`);		
@@ -31,10 +31,46 @@ module.exports = function ChatManager() {
 		if(connection) {
 			var index = this.findClientIndex(connection);
 			if(index !== -1) {
+				this.broadcastOnClientDisconnection(this.clients[index]);
 				this.clients.splice(index,1);
 			}
 			connection.destroy();
 		}
+	}
+
+	this.broadcastOnClientConnection = function(client) {
+		this.broadcastOnClientStatusChange(client, false);
+	}
+
+	this.broadcastOnClientDisconnection = function(client) {
+		this.broadcastOnClientStatusChange(client, true);
+	}
+
+	this.broadcastOnClientStatusChange = function(client, isDisconnect) {
+		var broadcastMessage = 'User ' + client.userName;
+		if(isDisconnect) {
+			broadcastMessage = broadcastMessage + ' has disonnected from ' + Constants.CHATTER + '.\n';
+		} else {
+			broadcastMessage = broadcastMessage + ' has connected to ' + Constants.CHATTER + '.\n';
+		}
+		//broadcastMessage = broadcastMessage + client.roomId + '\n';
+		
+		var rooms = this.RoomManager.rooms;
+		var commandAction = {
+			command: Constants.COMMANDS.JOIN,
+			shouldBroadcast: false,
+			data: '',
+			client: client,
+			handled: true,
+			broadcastAllState : {
+				broadcastOnComplete: true,
+				broadcastMessage: broadcastMessage,
+				client: client,
+				rooms: rooms
+			}			
+		}
+
+		this.handleBroadcast(commandAction);
 	}
 
 	this.findClientIndex = function(connection) {
@@ -99,6 +135,7 @@ module.exports = function ChatManager() {
 			connection.write('You are registered as ' + userName + `\n`);			
 			this.RoomManager.addClient(client, Constants.ROOM_LOBBY);			
 			connection.write(Constants.PROMPT_HELP + `\n`);
+			this.broadcastOnClientConnection(client);
 		}
 	}
 
@@ -107,6 +144,13 @@ module.exports = function ChatManager() {
 		var rooms = this.RoomManager.rooms;		
 		var commandAction = this.MessageManager.handleMessage(data, client, rooms);
 		this.handleServerCommand(commandAction);
+		if(commandAction && commandAction.broadcastAllState && commandAction.broadcastAllState.broadcastOnComplete) {
+			this.handleBroadcast(commandAction);
+		}
+	}
+
+	this.handleBroadcast = function(commandAction) {
+		this.MessageManager.broadcastMessage(commandAction.broadcastAllState.broadcastMessage, commandAction.broadcastAllState.client, commandAction.broadcastAllState.rooms, true);
 	}
 
 	this.handleServerCommand = function(commandAction) {

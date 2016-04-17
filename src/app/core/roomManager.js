@@ -109,7 +109,8 @@ module.exports = function RoomManager() {
 				} else {
 					welcomeMessage = 'You are now in room ' + roomId + '\n';
 				}
-				welcomeMessage = welcomeMessage + 'You can start chatting with other users in this room.\n';
+				welcomeMessage = welcomeMessage + 'You can start chatting with other users in this room\n';
+				welcomeMessage = welcomeMessage + 'Type /users to view users currently active. \n';
 				client.connection.write(welcomeMessage);
 				
 			}			

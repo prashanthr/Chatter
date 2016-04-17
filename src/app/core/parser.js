@@ -14,11 +14,15 @@ module.exports = function Parser() {
 				return Constants.CMD;
 			}
 		}
+		//Skip messages with only return char from client
+		if(message === '') {
+			return Constants.INVALID;
+		}
 		return Constants.MSG;
 	}
 
 	this.stripChars = function (message) {
-		return message.toString().replace(/\r\n/g, '');
+		return message.toString().replace(/\r\n/g, '');		
 	}
 
 	this.decodeCommand = function(command, client, rooms) {
@@ -30,7 +34,13 @@ module.exports = function Parser() {
 			shouldBroadcast: true,
 			data: data,
 			client: client,
-			handled: false
+			handled: false,
+			broadcastAllState: {
+				broadcastOnComplete: false,
+				broadcastMessage: '',
+				client: client,
+				rooms: rooms
+			}
 		}
 
 		switch(key) {
@@ -48,14 +58,16 @@ module.exports = function Parser() {
 				break;
 			case Constants.COMMANDS.QUIT:				
 				commandAction.shouldBroadcast = false;
-				commandAction.handled = false;
+				commandAction.handled = false;				
 				break;
 			case Constants.COMMANDS.JOIN:
 				var checkRoom = QueryHandler.checkRoom(command, rooms);
 				if(checkRoom.isValid){
 					commandAction.data = checkRoom;
 					commandAction.shouldBroadcast = false;
-					commandAction.handled = false;	
+					commandAction.handled = false;					
+					commandAction.broadcastAllState.broadcastMessage = 'User ' + client.userName + ' has joined room ' + checkRoom.roomId + '\n';
+					commandAction.broadcastAllState.broadcastOnComplete = true;					
 				} else {
 					commandAction.data = 'Room does not exist or is invalid. Room names are case sensitive.\n';
 					commandAction.shouldBroadcast = true;
@@ -65,6 +77,9 @@ module.exports = function Parser() {
 			case Constants.COMMANDS.LEAVE:
 				commandAction.shouldBroadcast = false;
 				commandAction.handled = false;
+				commandAction.broadcastAllState.client = Object.assign({}, client);
+				commandAction.broadcastAllState.broadcastMessage = 'User ' + client.userName + ' has left room ' + client.roomId + '\n';
+				commandAction.broadcastAllState.broadcastOnComplete = true;				
 				break;
 			case Constants.COMMANDS.CREATE:				
 				var checkRoom = QueryHandler.checkRoom(command, rooms);

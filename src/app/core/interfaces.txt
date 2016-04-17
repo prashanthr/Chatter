@@ -20,8 +20,15 @@
 //commandAction
 {
 	command: string;
-	shouldBroadcast: boolean;
-	data: string;
+	shouldBroadcast: boolean; //Broadcast an immediate message to the client from server
+	data: string; //messages
 	client: client;
-	handled: boolean;
+	handled: boolean; //command handled or not
+	broadcastAllState: {
+		broadcastAllOnComplete: boolean; //Broadcast a message after client action to other users
+		broadcastAllMessage: string;	
+		client: client;
+		rooms: room[];
+	}
+	
 }

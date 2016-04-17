@@ -27,7 +27,7 @@ module.exports = function MessageManager() {
 	}
 
 	this.handleMessageAction = function(message, client, rooms) {
-		this.Broadcast.broadcastMessage(message, client, rooms);
+		this.broadcastMessage(message, client, rooms, false);
 	}
 
 	this.handleCommandAction = function(message, client, rooms) {
@@ -40,5 +40,9 @@ module.exports = function MessageManager() {
 
 	this.handleInvalidAction = function(message, client) {
 		this.Broadcast.broadcastInvalidMessage(message, client);
+	}
+
+	this.broadcastMessage = function(message, client, rooms, isServerMessage) {
+		this.Broadcast.broadcastMessage(message, client, rooms, isServerMessage);
 	}
 };
