@@ -5,4 +5,11 @@ module.exports = function Utils() {
 		":" + now.getMilliseconds();
 		return formattedDate;
 	}
+
+	this.getFileTimestamp = function(){
+		var now = new Date();
+		var formattedDate = now.getUTCFullYear() + "_" + (now.getUTCMonth() + 1) + "_" + now.getUTCDate() + "_" + 
+		now.getUTCHours() + now.getUTCMinutes() + now.getUTCSeconds();
+		return formattedDate.toString();
+	}
 }

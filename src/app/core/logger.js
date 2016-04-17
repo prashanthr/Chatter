@@ -1,10 +1,12 @@
 var Constants = require('./includes/constants.js');
+var FileHandler = new (require('./fileHandler.js'))();
 module.exports = function Logger(enabled) {
 	this.enabled = enabled;
 	this.log = function(message) {
 		if(this.enabled) {
 			if(message) {
-				console.log(message);		
+				console.log(message);
+				//FileHandler.log(message);		
 			}			
 		}		
 	}
