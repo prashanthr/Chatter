@@ -25,7 +25,7 @@ module.exports = function Parser() {
 		return message.toString().replace(/\r\n/g, '');		
 	}
 
-	this.decodeCommand = function(command, client, rooms) {
+	this.decodeCommand = function(command, client, rooms, users) {
 		var data = '';
 		command = this.stripChars(command);
 		var key = command.split(' ')[0];
@@ -40,6 +40,11 @@ module.exports = function Parser() {
 				broadcastMessage: '',
 				client: client,
 				rooms: rooms
+			},
+			privateMessageState: {
+				enabled: false, 
+				recipient: null,
+				message: null
 			}
 		}
 
@@ -118,9 +123,20 @@ module.exports = function Parser() {
 				commandAction.handled = true;
 				break;
 			case Constants.COMMANDS.MSG:
-				commandAction.data = 'Private messaging is not yet supported. Coming soon!\n';
-				commandAction.handled = true;
-				//QueryHandler.msg(client)
+				var checkUser = QueryHandler.checkUser(command, client, rooms, users);
+				if(checkUser.isValid) {
+					//Send Msg
+					commandAction.privateMessageState.enabled = true;
+					commandAction.privateMessageState.recipient = checkUser.recipient;
+					commandAction.privateMessageState.message = checkUser.message;
+					commandAction.data = 'Private message has been sent to ' + checkUser.recipient.userName + '.\n';	
+					commandAction.shouldBroadcast = true;
+					commandAction.handled = true;
+				} else {
+					commandAction.data = checkUser.invalidMessage;	
+					commandAction.shouldBroadcast = true;
+					commandAction.handled = true;	
+				}				
 				break;
 			default:
 				commandAction.data = 'The command [' + command + '] is invalid or not yet supported. ' + Constants.PROMPT_HELP;

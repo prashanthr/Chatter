@@ -6,6 +6,9 @@ module.exports = function Broadcast() {
 	this.format = function(message, userName) {
 		return this.formatter.formatMessage(message, userName);
 	}
+	this.formatForPrivateMessage = function(message, fromUserName, toUserName) {
+		return this.formatter.formatPrivateMessage(message, fromUserName, toUserName);
+	}
 
 	this.broadcastMessage = function(data, client, rooms, isServerMessage) {
 		if(!isServerMessage) {
@@ -40,5 +43,13 @@ module.exports = function Broadcast() {
 
 	this.broadcastInvalidMessage = function(data, client) {
 		//DO NOTHING
-	}	
+	}
+
+	//Private Messages
+	this.broadcastToOne	 = function(client, recipient, data) {
+		if(client && recipient && data) {
+			data = this.formatForPrivateMessage(data, client.userName, recipient.userName);
+			recipient.connection.write(data);			
+		}
+	}
 };

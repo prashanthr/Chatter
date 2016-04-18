@@ -85,7 +85,7 @@ module.exports = {
         QUIT: 'Disconnects the user from the chat server. Usage: ' + COMMAND_QUIT,
         HELP: 'Lists all available commands for interaction with the server. Usage: ' + COMMAND_HELP,
         INFO: 'Lists useful information for the user (connection, room and server information). Usage: ' + COMMAND_INFO,
-        MSG: '(Not Supported Yet) Private messaging between 2 users. Usage: ' + COMMAND_MSG + ' [username] [message]',
+        MSG: 'Private messaging between 2 users. Usage: ' + COMMAND_MSG + ' [username] [message]',
         DELETE: 'Deletes a chat room. A user can only delete a chat room created by him/her. Usage: ' + COMMAND_DELETE + ' [roomname]',
     }
 }

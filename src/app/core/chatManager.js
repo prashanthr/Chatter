@@ -67,6 +67,11 @@ module.exports = function ChatManager() {
 				broadcastMessage: broadcastMessage,
 				client: client,
 				rooms: rooms
+			},
+			privateMessageState: {
+				enabled: false, 
+				recipient: null,
+				message: null
 			}			
 		}
 
@@ -141,8 +146,9 @@ module.exports = function ChatManager() {
 
 	this.handleMessages = function(data, connection) {
 		var client = this.getClient(connection);
-		var rooms = this.RoomManager.rooms;		
-		var commandAction = this.MessageManager.handleMessage(data, client, rooms);
+		var rooms = this.RoomManager.rooms;
+		var users = this.clients;		
+		var commandAction = this.MessageManager.handleMessage(data, client, rooms, users);
 		this.handleServerCommand(commandAction);
 		if(commandAction && commandAction.broadcastAllState && commandAction.broadcastAllState.broadcastOnComplete) {
 			this.handleBroadcast(commandAction);

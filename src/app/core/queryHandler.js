@@ -76,17 +76,45 @@ module.exports = function QueryHandler() {
 		return check;
 	}
 
-	this.checkUser = function(command, client, rooms) {
+	this.checkUser = function(command, client, rooms, users) {
 		var check = {
-			from: client.id,
-			to: null,
+			//recipient of type client
+			recipient: {
+				connection: {},
+				address: '',
+				port: '',
+				userName: null,
+				isRegistered: false,
+				roomId: ''	
+			}, 
 			message: '',
+			isValid: false,
+			invalidMessage: ''
 		}
 		var split = command.split(' ');
-		var toUser = split[1];
-		//TODO:
-
-		return check;
+		
+		if(split.length > 2) {
+			var toUser = split[1];
+			if(toUser) {
+				var find = users.find((user) => {
+					return user.userName === toUser;
+				});
+				if(find !== undefined && (client.userName !== find.userName)){
+					check.isValid = true;
+					check.recipient = find;
+					for(var i=2; i<split.length; i++) {
+						check.message = check.message + split[i];
+					}
+				} else {
+					check.isValid = false;
+					check.recipient.userName = toUser;
+					check.invalidMessage = 'Invalid user/bad username. No such user exists. \n';
+				}			
+			} 
+		} else {
+			check.invalidMessage = 'Invalid number of parameters. Please type ' + Constants.COMMANDS.HELP + ' to view usage\n';
+		}		
+		return check;		
 	}
 
 	this.info = function(client, rooms){

@@ -14,5 +14,10 @@ module.exports = function Formatter() {
 		var timestamp = Utils.getTimestamp();
 		var formattedDate = "[" + timestamp + "] ";
 		return formattedDate;
+	}
+
+	this.formatPrivateMessage = function(message, fromUserName, toUserName) {
+		var formattedMessage = '(Private Message) ' + this.formatMessage(message, fromUserName);
+		return formattedMessage;
 	}	
 }

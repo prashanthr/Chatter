@@ -29,6 +29,11 @@
 		broadcastAllMessage: string;	
 		client: client;
 		rooms: room[];
+	},
+	privateMessageState: {
+		enabled: boolean; //private mode
+		recipient: client; //send to
+		message: string;
 	}
 	
 }
