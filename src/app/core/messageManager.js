@@ -9,12 +9,12 @@ module.exports = function MessageManager() {
 		return this.Parser.decode(message);
 	}
 
-	this.handleMessage = function(message, client, rooms) {
+	this.handleMessage = function(message, client, rooms, users) {
 		//parse & handle
 		var cmd = this.parse(message);		
 		switch(cmd) {
 			case Constants.CMD:
-				return this.handleCommandAction(message, client, rooms);
+				return this.handleCommandAction(message, client, rooms, users);
 				break;
 			case Constants.MSG:
 				this.handleMessageAction(message, client, rooms);
@@ -30,11 +30,18 @@ module.exports = function MessageManager() {
 		this.broadcastMessage(message, client, rooms, false);
 	}
 
-	this.handleCommandAction = function(message, client, rooms) {
-		var commandAction = this.Parser.decodeCommand(message, client, rooms);		
+	this.handleCommandAction = function(message, client, rooms, users) {
+		var commandAction = this.Parser.decodeCommand(message, client, rooms, users);		
+		if(commandAction.privateMessageState && commandAction.privateMessageState.enabled) {
+			//Send Private Message
+			var recipient = commandAction.privateMessageState.recipient;
+			var msg = commandAction.privateMessageState.message;
+			this.handlePrivateMessage(client, recipient, msg);
+		}
+
 		if(commandAction.shouldBroadcast) {
 			this.Broadcast.broadcastCommand(commandAction.data, client);	
-		} 		
+		}  		
 		return commandAction;		
 	}
 
@@ -44,5 +51,9 @@ module.exports = function MessageManager() {
 
 	this.broadcastMessage = function(message, client, rooms, isServerMessage) {
 		this.Broadcast.broadcastMessage(message, client, rooms, isServerMessage);
+	}
+
+	this.handlePrivateMessage = function(client, recipient, message) {
+		this.Broadcast.broadcastToOne(client, recipient, message);
 	}
 };
