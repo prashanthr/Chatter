@@ -122,6 +122,10 @@ module.exports = function Parser() {
 				commandAction.handled = true;
 				//QueryHandler.msg(client)
 				break;
+			case Constants.COMMANDS.WEATHER:
+				commandAction.shouldBroadcast = false;
+				commandAction.handled = false;
+				break;
 			default:
 				commandAction.data = 'The command [' + command + '] is invalid or not yet supported. ' + Constants.PROMPT_HELP;
 				commandAction.handled = true;

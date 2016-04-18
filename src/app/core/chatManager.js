@@ -2,10 +2,12 @@ var Constants = require('./includes/constants.js');
 var MessageManager = require('./messageManager.js');
 var RoomManager = require('./roomManager.js');
 var Logger = new (require('./logger.js'))(Constants.LOG_ENABLED);
+var ExternalManager = require('./external/externalManager.js');
 module.exports = function ChatManager() {
 	this.MessageManager = new MessageManager();
 	this.RoomManager = new RoomManager();	
 	this.clients = [];
+	this.ExtManager = new ExternalManager();
 
 	//Create Lobby	
 	this.RoomManager.createLobby();
@@ -18,7 +20,11 @@ module.exports = function ChatManager() {
 			port: connection.remotePort,
 			userName: null,
 			isRegistered: false,
-			roomId: Constants.ROOM_LOBBY
+			roomId: Constants.ROOM_LOBBY,
+			inExternalMode: false,
+			externalState: {
+
+			}
 		};	
 		this.addClient(client);				
 
@@ -142,11 +148,22 @@ module.exports = function ChatManager() {
 	this.handleMessages = function(data, connection) {
 		var client = this.getClient(connection);
 		var rooms = this.RoomManager.rooms;		
-		var commandAction = this.MessageManager.handleMessage(data, client, rooms);
-		this.handleServerCommand(commandAction);
-		if(commandAction && commandAction.broadcastAllState && commandAction.broadcastAllState.broadcastOnComplete) {
-			this.handleBroadcast(commandAction);
+		if(!client.inExternalMode) {
+			var commandAction = this.MessageManager.handleMessage(data, client, rooms);
+			this.handleServerCommand(commandAction);
+			if(commandAction && commandAction.broadcastAllState && commandAction.broadcastAllState.broadcastOnComplete) {
+				this.handleBroadcast(commandAction);
+			}
+		} else {
+			var msg = data.toString().replace('\r\n', '');
+			if(msg === Constants.COMMAND_END) {
+				client.inExternalMode = false;
+				this.ExtManager.endTransmission(client, Constants.EXT_WEATHER_HOST, Constants.EXT_WEATHER_PORT);
+			} else {
+				this.ExtManager.handleTransmission(client, Constants.EXT_WEATHER_HOST, Constants.EXT_WEATHER_PORT, data);
+			}						
 		}
+		
 	}
 
 	this.handleBroadcast = function(commandAction) {
@@ -178,6 +195,11 @@ module.exports = function ChatManager() {
 						var response = commandAction.data;
 						this.RoomManager.removeRoom(response.roomId, commandAction.client);
 						break;
+					case Constants.COMMANDS.WEATHER:
+						//this.ExtManager.connect(3000, 'rainmaker.wunderground.com');
+						commandAction.client.inExternalMode = true;
+						this.ExtManager.initateTransmission(commandAction.client, Constants.EXT_WEATHER_HOST, Constants.EXT_WEATHER_PORT);
+						break;					
 					default:
 						Logger.log('Not handling command ' + commandAction + '\n');						
 						break;

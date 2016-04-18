@@ -8,6 +8,7 @@ const CONNECTION = "connection";
 const DISCONNECT = "disconnect";
 const DATA = "data";
 const ERROR = "error";
+const CLOSE = "close"
 
 const IncludesDir = "includes";
 const ClientDir = "web-client";
@@ -34,12 +35,16 @@ const COMMAND_QUIT = "/quit";
 const COMMAND_HELP = "/help";
 const COMMAND_INFO = "/info";
 const COMMAND_MSG = "/msg";
+const COMMAND_WEATHER = "/weather";
+const COMMAND_END = "/end";
 
 const PromptWelcomeMessage = "Welcome to the " + CHATTER + " server\n" + "Version " + VERSION + "\n";
 const PromptLoginName = "What is your login user name?";
 const PromptLobby = "You are now in the " + RoomLobby;
 const PromptHelp = "Type " + COMMAND_HELP + " for a list of available commands. \n";
 
+const EXT_WEATHER_PORT = 3000;
+const EXT_WEATHER_HOST = 'rainmaker.wunderground.com';
 
 const LOG_ENABLED = true;
 
@@ -48,6 +53,7 @@ module.exports = {
 	CONNECTION: CONNECTION,
 	DISCONNECT: DISCONNECT,
     DATA: DATA,
+    CLOSE: CLOSE,
 	INCLUDES_DIR: IncludesDir,
     CLIENT_DIR: ClientDir,
     SERVER_DIR: ServerDir,
@@ -64,6 +70,9 @@ module.exports = {
     PROMPT_LOBBY: PromptLobby,
     PROMPT_HELP: PromptHelp,
     ROOM_LOBBY: RoomLobby,
+    EXT_WEATHER_HOST: EXT_WEATHER_HOST,
+    EXT_WEATHER_PORT: EXT_WEATHER_PORT,
+    COMMAND_END: COMMAND_END,
     COMMANDS: {
         ROOMS: COMMAND_ROOMS,
         USERS: COMMAND_USERS,
@@ -74,7 +83,8 @@ module.exports = {
         HELP: COMMAND_HELP,
         INFO: COMMAND_INFO,
         MSG: COMMAND_MSG,
-        DELETE: COMMAND_DELETE
+        DELETE: COMMAND_DELETE,
+        WEATHER: COMMAND_WEATHER,        
     },
     COMMAND_DETAILS: {
         ROOMS: 'Lists all the rooms on the server. Usage: ' + COMMAND_ROOMS,
@@ -87,5 +97,6 @@ module.exports = {
         INFO: 'Lists useful information for the user (connection, room and server information). Usage: ' + COMMAND_INFO,
         MSG: '(Not Supported Yet) Private messaging between 2 users. Usage: ' + COMMAND_MSG + ' [username] [message]',
         DELETE: 'Deletes a chat room. A user can only delete a chat room created by him/her. Usage: ' + COMMAND_DELETE + ' [roomname]',
+        WEATHER: 'Starts an interactive session with Weather Underground for weather information. Usage: ' + COMMAND_WEATHER,
     }
 }
