@@ -121,14 +121,24 @@ module.exports = function ChatManager() {
 	}
 
 	this.stripUserName = function(userName) {
+		userName = userName.replace(' ', '');
 		userName = userName.replace('\r\n', '');
 		userName = userName.replace('\\', '');
 		userName = userName.replace('\/', '');
+		userName = userName.replace('\r', '');
+		userName = userName.replace('\n', '');
+		userName = userName.replace(/[!@#$%^&*]/g, '');
 		return userName;
 	}
 	this.registerClient = function(userName, connection) {
 		userName = userName.toString();
 		userName = this.stripUserName(userName);
+		if(userName.length > Constants.MAX_USERNAME_LENGTH) {
+			var invalidMessage = 'Error! Too many characters entered. Max length for username is ' + Constants.MAX_USERNAME_LENGTH + '. Please try again. \n';
+			connection.write(invalidMessage);
+			return;
+		} 
+
 		if(this.userNameTaken(userName)) {
 			connection.write(userName + ' is taken. Please try another. \n Login user name?\n');
 		} else {

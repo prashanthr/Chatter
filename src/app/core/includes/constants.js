@@ -24,6 +24,9 @@ const MSG_TYPE_CMD = "CMD";
 const MSG_TYPE_MSG = "MSG";
 const MSG_TYPE_INVALID = "INVALID";
 
+const MAX_USERNAME_LENGTH = 16;
+const MAX_MESSAGE_LENGTH = 500;
+
 const COMMAND_ROOMS = "/rooms";
 const COMMAND_USERS = "/users";
 const COMMAND_JOIN = "/join";
@@ -64,6 +67,8 @@ module.exports = {
     PROMPT_LOBBY: PromptLobby,
     PROMPT_HELP: PromptHelp,
     ROOM_LOBBY: RoomLobby,
+    MAX_USERNAME_LENGTH: MAX_USERNAME_LENGTH,
+    MAX_MESSAGE_LENGTH: MAX_MESSAGE_LENGTH,
     COMMANDS: {
         ROOMS: COMMAND_ROOMS,
         USERS: COMMAND_USERS,
