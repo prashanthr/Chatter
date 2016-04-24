@@ -20,6 +20,9 @@ tcp-app
 # build
 builds
 
+# scratch
+scratch
+
 # test
 ts-test
 >>>>>>> origin/master

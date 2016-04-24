@@ -5,6 +5,7 @@ A chat server built using Node.js that communicates over TCP
 1. Install Node.js from [https://nodejs.org/en/](https://nodejs.org/en/)
 2. Run the following Command
 ```JavaScript
+cd src/app/tcp-server
 node chatter
 ```
 # Supported Features
