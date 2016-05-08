@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/prashanthr/Chatter.svg?branch=master)](https://travis-ci.org/prashanthr/Chatter)
+
 # Chatter
 A chat server built using Node.js that communicates over TCP
 
