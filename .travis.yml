@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - '5'
-  - 'net'
+#  - 'net'
 script:
 # - node src/app/tcp-server/chatter.js
 # - telnet localhost:3000
